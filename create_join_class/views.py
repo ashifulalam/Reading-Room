@@ -29,3 +29,28 @@ def create_class(request):
             return render(request, 'create_join_class/create_class.html',
                           {'form': CreateClassRoomForm, 'error': 'Bad data passed in. Try again!'})
 
+
+
+# This method is used to join class. It checks if the user has uploaded an image of himself and only then
+# allows the user to enter the classroom code. If the code matches the user successfully jons the class. Else,
+# the system prompts the user to reenter code.
+@login_required
+def join_class(request):
+    if request.method == "GET":
+
+            return render(request, 'create_join_class/join_class.html')
+
+    else:
+        # checking if the class code that user entered does exist or not
+        try:
+            classobj = ClassRoom.objects.get(classCode=request.POST['classCode'])
+        except ClassRoom.DoesNotExist:
+            return render(request, 'create_join_class/join_class.html',
+                          {'error': 'No class found with that class code!'})
+
+        if classobj.teacher == request.user:
+            return render(request, 'create_join_class/join_class.html', {'error': 'You are the teacher of this class!'})
+        else:
+            user = request.user
+            classobj.students.add(user)
+            return redirect('home_classroom')
