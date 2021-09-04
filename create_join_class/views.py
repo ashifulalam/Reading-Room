@@ -54,3 +54,11 @@ def join_class(request):
             user = request.user
             classobj.students.add(user)
             return redirect('home_classroom')
+
+
+# This method is used to show the created classrooms by a user.
+# It returns a html page with links to all created classrooms.
+@login_required
+def viewcreatedclassroom(request, classroom_pk):
+    classroom = get_object_or_404(ClassRoom, teacher=request.user, pk=classroom_pk)
+    return render(request, "create_join_class/viewcreatedclassroom.html", {'classroom': classroom})
