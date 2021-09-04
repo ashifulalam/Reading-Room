@@ -62,3 +62,11 @@ def join_class(request):
 def viewcreatedclassroom(request, classroom_pk):
     classroom = get_object_or_404(ClassRoom, teacher=request.user, pk=classroom_pk)
     return render(request, "create_join_class/viewcreatedclassroom.html", {'classroom': classroom})
+
+
+# This method is used to show the joined classrooms by a user.
+# It returns a html page with links to all joined classrooms.
+@login_required
+def viewjoinedclassroom(request, classroom_pk):
+    classroom = get_object_or_404(ClassRoom, students__in=[request.user.id], pk=classroom_pk)
+    return render(request, "create_join_class/viewjoinedclassroom.html", {'classroom': classroom})
