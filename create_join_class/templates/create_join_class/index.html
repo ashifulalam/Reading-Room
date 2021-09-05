@@ -1,0 +1,40 @@
+{% extends "create_join_class/base.html" %}
+{% block content %}
+    {% load socialaccount %}
+    {% providers_media_js %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <hr>
+            <div class="text-center">
+                Need an account? <a href="{% url 'signup_user' %}">Sign Up here</a>
+            </div>
+            <hr>
+
+            <div class="row justify-content-center mt-10">
+                <div class="col-md-16">
+                    <a href="{% provider_login_url "google" method="js_sdk" %}" class="btn btn-primary"> Google </a>
+                    <a href="{% provider_login_url "github" method="js_sdk" %}" class="btn btn-primary"> Github </a>
+                    <a href="{% url 'signup_user' %}" class="btn btn-primary"> New Account </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
