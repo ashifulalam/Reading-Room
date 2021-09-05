@@ -29,16 +29,15 @@ def create_class(request):
             return render(request, 'create_join_class/create_class.html',
                           {'form': CreateClassRoomForm, 'error': 'Bad data passed in. Try again!'})
 
-# This method is used for logging in. It redirects the user to homepage if credentials match.
-# Else it prompts the user to reenter credentials.
-def index(request):
-    if request.method == 'GET':
-        return render(request, 'create_join_class/index.html', {'form': AuthenticationForm()})
-    else:
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        if user is None:
-            return render(request, 'create_join_class/index.html',
-                          {'form': AuthenticationForm(), 'error': 'Username or password is incorrect'})
-        else:
-            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            return redirect('home_classroom')
+create_join_class/models.py
+# This class is for all classrooms that are going to be created. Each classroom has a name, section, code,
+# one teacher and zero to many students.
+class ClassRoom(models.Model):
+    name = models.CharField(max_length=100)
+    section = models.IntegerField()
+    classCode = models.CharField(max_length=6, null=True, blank=True, unique=True)
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher_of_the_class')
+    students = models.ManyToManyField(User, blank=True, related_name='student_of_the_class')
+
+    def __str__(self):
+        return self.name + '.' + str(self.section) + ' ID:' + str(self.id)
