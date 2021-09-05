@@ -57,3 +57,14 @@ class ClassRoom(models.Model):
     def __str__(self):
         return self.name + '.' + str(self.section) + ' ID:' + str(self.id)
 
+
+# This method is the homepage where the user can see his/her created and joined classes.
+# It returns the homepage.
+@login_required
+def home_classroom(request):
+    created_classes = ClassRoom.objects.filter(teacher=request.user)
+    joined_classes = ClassRoom.objects.filter(students__in=[request.user.id])
+    return render(request, 'create_join_class/home_classroom.html',
+                  {'user': request.user, 'created_classes': created_classes, 'joined_classes': joined_classes})
+
+
