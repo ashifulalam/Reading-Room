@@ -29,3 +29,16 @@ def create_class(request):
             return render(request, 'create_join_class/create_class.html',
                           {'form': CreateClassRoomForm, 'error': 'Bad data passed in. Try again!'})
 
+# This method is used for logging in. It redirects the user to homepage if credentials match.
+# Else it prompts the user to reenter credentials.
+def index(request):
+    if request.method == 'GET':
+        return render(request, 'create_join_class/index.html', {'form': AuthenticationForm()})
+    else:
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'create_join_class/index.html',
+                          {'form': AuthenticationForm(), 'error': 'Username or password is incorrect'})
+        else:
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return redirect('home_classroom')
