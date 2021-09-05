@@ -28,13 +28,13 @@ def create_class(request):
         except ValueError:
             return render(request, 'create_join_class/create_class.html',
                           {'form': CreateClassRoomForm, 'error': 'Bad data passed in. Try again!'})
-                          
+
 
 # This method is used to upload reading material by the teacher of the class. The teacher
 # can only upload pdf files as reading material. If upload is successful, the teacher
 # is redirected to the created classroom html. Else the teacher is prompted to upload the file again.
 @login_required
-def uploadReadingMaterial(request, classroom_pk):  #AA
+def uploadReadingMaterial(request, classroom_pk): 
     if request.method == 'GET':
         try:
             classroom = ClassRoom.objects.get(teacher=request.user, pk=classroom_pk)
