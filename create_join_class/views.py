@@ -50,6 +50,13 @@ def signup_user(request):
                           {'form': UserCreationForm(), 'error': 'Password did not '
                                                                 'match!'})
 
+# This method logs out the user from the site and redirects him/her to the login page.
+@login_required
+def logout_user(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('index')
+
 
 
                           
