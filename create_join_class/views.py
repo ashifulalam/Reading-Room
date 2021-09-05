@@ -55,3 +55,12 @@ def uploadReadingMaterial(request, classroom_pk):
         else:
             return render(request, "create_join_class/uploadReadingMaterial.html", {'form': form})
 
+
+# This method is used to delete any reading material uploaded by the teacher of the class. The teacher
+# can only delete pdf files.
+@login_required
+def deleteReadingMaterial(request, classroom_pk, readingMaterial_pk):
+    if request.method == "POST":
+        readingmaterial = ReadingMaterial.objects.get(pk=readingMaterial_pk)
+        readingmaterial.delete()
+        return redirect('viewCreatedReadingMaterial', classroom_pk)
