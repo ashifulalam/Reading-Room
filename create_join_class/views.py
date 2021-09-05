@@ -65,9 +65,18 @@ def deleteReadingMaterial(request, classroom_pk, readingMaterial_pk):
         readingmaterial.delete()
         return redirect('viewCreatedReadingMaterial', classroom_pk)
 
+
 # This method is used to view the created reading materials by the teacher.
 # It shows all the reading materials created by the teacher for a particular class.
 @login_required 
 def viewCreatedReadingMaterial(request, created_pk):
     materialTeacher = ReadingMaterial.objects.filter(classroom_id=created_pk, uploader=request.user)
     return render(request, "create_join_class/viewCreatedReadingMaterial.html", {'materialTeacher': materialTeacher})
+
+# This method is used to view the reading materials as a student.
+# It shows all the reading materials uploaded by the teacher for a particular class.
+@login_required 
+def viewJoinedReadingMaterial(request, joined_pk):
+    materialStudent = ReadingMaterial.objects.filter(classroom_id=joined_pk, classroom__students__in=[request.user.id])
+    return render(request, "create_join_class/viewJoinedReadingMaterial.html", {'materialStudent': materialStudent})
+
