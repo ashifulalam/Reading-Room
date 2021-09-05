@@ -80,3 +80,9 @@ def viewJoinedReadingMaterial(request, joined_pk):
     materialStudent = ReadingMaterial.objects.filter(classroom_id=joined_pk, classroom__students__in=[request.user.id])
     return render(request, "create_join_class/viewJoinedReadingMaterial.html", {'materialStudent': materialStudent})
 
+# This method is used to show pdf files to the students and returns and a html page where the pdf file is
+# embedded.
+
+@login_required
+def viewPDF(request, filename, material_id):
+    return render(request, "create_join_class/viewPDF.html", {'filename': filename, 'material_id': material_id,'username': request.user.username})
