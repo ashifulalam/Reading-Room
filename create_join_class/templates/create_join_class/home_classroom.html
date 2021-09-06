@@ -1,0 +1,50 @@
+{% extends "create_join_class/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="row justify-content-center mt-10">
+        <div class="col-md-16">
+            <br>
+            <a href="{% url 'create_class' %}" class="btn btn-primary">Create a new class</a>
+            <a href="{% url 'join_class' %}" class="btn btn-primary">Join a class</a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-8">
+        <div class="col-md-7 text-center">
+            <p>
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert alert-primary" role="alert" {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            </p>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-8">
+        <div class="col-md-7 text-center">
+            {% if created_classes %}
+                <h2> Your created classes </h2>
+                {% for class in created_classes %}
+                    <a href="{% url 'viewcreatedclassroom' class.id %}">
+                        <h3>{{ class.name }}.{{ class.section }} - {{ class.classCode }}</h3>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h3>Looks like you did not create any class yet</h3>
+
+            {% endif %}
+
+            {% if joined_classes %}
+                <h2> Your joined classes </h2>
+                {% for class in joined_classes %}
+                    <a href="{% url 'viewjoinedclassroom' class.id %}">
+                        <h3>{{ class.name }}.{{ class.section }} - {{ class.classCode }}</h3>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <h3>Looks like you did not join any class yet!</h3>
+
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
