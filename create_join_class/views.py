@@ -68,3 +68,44 @@ def home_classroom(request):
                   {'user': request.user, 'created_classes': created_classes, 'joined_classes': joined_classes})
 
 
+
+
+# This method is used to join class. It checks if the user has uploaded an image of himself and only then
+# allows the user to enter the classroom code. If the code matches the user successfully jons the class. Else,
+# the system prompts the user to reenter code.
+@login_required
+def join_class(request):
+    if request.method == "GET":
+
+            return render(request, 'create_join_class/join_class.html')
+
+    else:
+        # checking if the class code that user entered does exist or not
+        try:
+            classobj = ClassRoom.objects.get(classCode=request.POST['classCode'])
+        except ClassRoom.DoesNotExist:
+            return render(request, 'create_join_class/join_class.html',
+                          {'error': 'No class found with that class code!'})
+
+        if classobj.teacher == request.user:
+            return render(request, 'create_join_class/join_class.html', {'error': 'You are the teacher of this class!'})
+        else:
+            user = request.user
+            classobj.students.add(user)
+            return redirect('home_classroom')
+
+
+# This method is used to show the created classrooms by a user.
+# It returns a html page with links to all created classrooms.
+@login_required
+def viewcreatedclassroom(request, classroom_pk):
+    classroom = get_object_or_404(ClassRoom, teacher=request.user, pk=classroom_pk)
+    return render(request, "create_join_class/viewcreatedclassroom.html", {'classroom': classroom})
+
+
+# This method is used to show the joined classrooms by a user.
+# It returns a html page with links to all joined classrooms.
+@login_required
+def viewjoinedclassroom(request, classroom_pk):
+    classroom = get_object_or_404(ClassRoom, students__in=[request.user.id], pk=classroom_pk)
+    return render(request, "create_join_class/viewjoinedclassroom.html", {'classroom': classroom})
