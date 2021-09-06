@@ -1,0 +1,24 @@
+{% extends "create_join_class/base.html" %}
+{% block content %}
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <h2> Upload a PDF File </h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% else %}
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Upload File</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
